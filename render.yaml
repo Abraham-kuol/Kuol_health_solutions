@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: kuol-health-solutions
+    env: python
+    plan: free
+    buildCommand: "bash build.sh"
+    startCommand: "gunicorn koul_health_solutions.wsgi:application"
+    autoDeploy: true
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com"
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://*.onrender.com"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: kuol-health-db
+          property: connectionString
+
+databases:
+  - name: kuol-health-db
+    plan: free
